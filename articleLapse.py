@@ -6,6 +6,7 @@ import requests
 import hashlib
 import os
 from selenium import webdriver
+from PIL import Image
 urlList = ["https://www.express.co.uk/news/uk/966524/english-defence-league-leader-tommy-robinson-jailed-contempt-of-court", "http://www.bbc.com/news/av/uk-england-leeds-44292139/tommy-robinson-arrested-outside-leeds-crown-court", "http://www.bbc.com/news/uk-england-leeds-44287640", "https://metro.co.uk/2018/05/29/tommy-robinson-jailed-13-months-contempt-court-7587545/", "https://metro.co.uk/2018/05/28/tommy-robinson-arrested-7583101/"]
 
 class Page():
@@ -22,20 +23,25 @@ class Page():
         #self.fileName = "job" + str(jobNumber)
         self.htmlFileName = "recordedHTML"
         self.nHTMLChecks = 0
-        self.imageType = ".png"
+        
 
     def getScreenShot(self):
         self.imageKeyFrameNumber += 1
-        self.imageFileName = self.imagePath + str(self.imageKeyFrameNumber) +  self.imageType
+        self.imageFileNamePNG = self.imagePath + str(self.imageKeyFrameNumber) +  ".png"
+        self.imageFileNameJPG = self.imagePath + str(self.imageKeyFrameNumber) +  ".jpg"
         DRIVER = 'chromedriver'
         driver = webdriver.Chrome(DRIVER)
         driver.get(self.url)
         time.sleep(5)
         if not os.path.exists(self.imagePath):
             os.mkdir(self.imagePath)
-        screenshot = driver.save_screenshot(self.imageFileName)
+        screenshot = driver.save_screenshot(self.imageFileNamePNG)
         driver.quit()
         time.sleep(1)
+
+        im = Image.open(self.imageFileNamePNG)
+        rgb_im = im.convert('RGB')
+        rgb_im.save(self.imageFileNameJPG)
 
 
 
@@ -56,13 +62,13 @@ class Page():
                 f.write(self.currentSite)
             self.lastSite = self.currentSite
             self.getScreenShot()
-            sendImage(self.imageFileName, self.jobNumber)
+            sendImage(self.imageFileNameJPG, self.jobNumber)
         else:
             print("no html or txt change detected at" + str( time.time() )  )
 
         if self.nHTMLChecks % 2 == 0:
             self.getScreenShot()
-            sendImage(self.imageFileName, self.jobNumber)
+            sendImage(self.imageFileNameJPG, self.jobNumber)
 
 def sendImage(fileName, jobNumber):
     try:
