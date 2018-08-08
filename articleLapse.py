@@ -89,18 +89,18 @@ def sendImage(fileName, jobNumber):
                 # print(md5)
                 # print(fileData)
                 # print("sent image, got response: ")
-                # print(r.status_code)
-                # print(r.text)
                 if(r.status_code == 202):
                     success = True
                     transmitionDuration = time.time() - timeAtSendStart
                     print( "sent Image successfully to growing video server in " + str(transmitionDuration) + " seconds")
                 else:
+                    print(r.status_code)
+                    print(r.text)
                     print('failed to send to growing video server, waiting for '+ str(wait)+' seconds')
                     time.sleep(wait)
                     wait = min(wait * 2, 3600)
     except Exception as e:
-        print("-----Warning could not Send Image ", e )
+        print "-----Warning could not Send Image ", e
 
 
 
