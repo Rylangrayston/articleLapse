@@ -80,7 +80,7 @@ def sendImage(fileName, jobNumber):
             while not success:
                 print(" attempting to send image growing video server")
                 timeAtSendStart = time.time()
-                r = requests.post('http://timelapse.eriktetland.com/images/',
+                r = requests.post('http://timelapse.eriktetland.com/images',
                     files={'file': fileData},
                     data = {
                         'md5':md5,
