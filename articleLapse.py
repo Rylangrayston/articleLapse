@@ -84,7 +84,8 @@ def sendImage(fileName, jobNumber):
                     files={'file': fileData},
                     data = {
                         'md5':md5,
-                        'job':jobNumber
+                        'job':jobNumber,
+                        'filename':fileName
                     })
                 # print(md5)
                 # print(fileData)
